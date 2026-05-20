@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── Cores base ───────────────────────────────────────── */
+    --background: 40 100% 98%;
+    --foreground: 240 25% 18%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 25% 18%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 25% 18%;
+
+    --primary: 12 92% 64%;           /* Coral */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 165 70% 55%;        /* Mint */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 40 40% 94%;             /* Bege claro */
+    --muted-foreground: 240 10% 48%;
+
+    --accent: 45 100% 65%;           /* Amarelo solar */
+    --accent-foreground: 240 25% 18%;
+
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 35 30% 88%;
+    --input: 35 30% 88%;
+    --ring: 12 92% 64%;
+
+    --radius: 1.25rem;
+
+    /* ── Cores extras ─────────────────────────────────────── */
+    --sky: 200 90% 65%;
+    --lavender: 265 75% 72%;
+
+    /* ── Sombras ──────────────────────────────────────────── */
+    --shadow-soft: 0 8px 24px -8px hsl(12 92% 64% / 0.18);
+    --shadow-pop:  0 12px 32px -10px hsl(265 75% 72% / 0.25);
+    --shadow-card: 0 4px 16px -4px hsl(240 25% 18% / 0.08);
+  }
+
+  .dark {
+    --background: 240 25% 10%;
+    --foreground: 40 30% 95%;
+
+    --card: 240 25% 13%;
+    --card-foreground: 40 30% 95%;
+
+    --popover: 240 25% 13%;
+    --popover-foreground: 40 30% 95%;
+
+    --primary: 12 92% 64%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 165 70% 55%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 240 20% 18%;
+    --muted-foreground: 240 10% 60%;
+
+    --accent: 45 100% 65%;
+    --accent-foreground: 240 25% 18%;
+
+    --destructive: 0 75% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 15% 22%;
+    --input: 240 15% 22%;
+    --ring: 12 92% 64%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Nunito', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fredoka', system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  /* ── Gradientes ───────────────────────────────────────── */
+  .bg-gradient-hero {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--accent)) 50%,
+      hsl(var(--secondary)) 100%
+    );
+  }
+  .bg-gradient-sunset {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(330 70% 65%));
+  }
+  .bg-gradient-sky {
+    background: linear-gradient(135deg, hsl(var(--sky)), hsl(var(--lavender)));
+  }
+  .bg-gradient-mint {
+    background: linear-gradient(135deg, hsl(var(--secondary)), hsl(180 70% 55%));
+  }
+  .bg-gradient-soft {
+    background: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
+  }
+
+  /* ── Sombras ──────────────────────────────────────────── */
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+  .shadow-pop  { box-shadow: var(--shadow-pop); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+
+  /* ── Transição bouncy ─────────────────────────────────── */
+  .transition-bouncy {
+    transition-property: transform, box-shadow;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+}
