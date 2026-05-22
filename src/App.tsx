@@ -3,6 +3,7 @@ import { Navbar } from "./components/Navbar";
 import { LandingPage } from "./pages/LandingPage";
 import { AuthPage } from "./pages/AuthPage";
 import { NewChildPage } from "./pages/NewChildPage";
+import { FeedPage } from "./pages/FeedPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/app/criancas/nova" element={<NewChildPage />} />
+        <Route path="/app/atividades" element={<FeedPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -63,3 +63,14 @@ export interface ChildFormErrors {
   ageRange?: string;
   supportLevel?: string;
 }
+
+export interface AIActivityRecommendation {
+  id: string;
+  titulo: string;
+  descricao_curta: string;
+  explicacao: string;
+  categoria: "sensorial" | "motora" | "cognitiva" | "social" | "criativa";
+  tempo_minutos: number;
+  nivel_barulho: "baixo" | "medio" | "alto";
+  fonte: string;
+}
