@@ -2,7 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NavbarApp } from "../components/NavbarApp";
 import { useAppStore } from "../store/useAppStore";
-import type { AgeRange, SupportLevel, ChildProfileForm, ChildFormErrors as FormErrors } from "../types";
+import type {
+  AgeRange,
+  SupportLevel,
+  ChildProfileForm,
+  ChildFormErrors as FormErrors,
+} from "../types";
 
 // ── Data ───────────────────────────────────────────────────────────────────
 
@@ -12,7 +17,11 @@ const AGE_RANGES: { value: AgeRange; label: string }[] = [
   { value: "8-12", label: "8 a 12 anos" },
 ];
 
-const SUPPORT_LEVELS: { value: SupportLevel; label: string; description: string }[] = [
+const SUPPORT_LEVELS: {
+  value: SupportLevel;
+  label: string;
+  description: string;
+}[] = [
   { value: 1, label: "Nível 1", description: "Necessita pouco suporte" },
   { value: 2, label: "Nível 2", description: "Suporte substancial" },
   { value: 3, label: "Nível 3", description: "Suporte muito substancial" },
@@ -61,6 +70,16 @@ const GOALS: { value: string; label: string }[] = [
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
+function generateId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
+
 function toggle(list: string[], value: string): string[] {
   return list.includes(value)
     ? list.filter((v) => v !== value)
@@ -103,7 +122,7 @@ export function NewChildPage() {
       return;
     }
     addChild({
-      id: crypto.randomUUID(),
+      id: generateId(),
       name: form.name,
       ageRange: form.ageRange!,
       supportLevel: form.supportLevel!,
@@ -161,7 +180,7 @@ export function NewChildPage() {
                 id="name-input"
                 type="text"
                 autoComplete="off"
-                placeholder="Como vocês chamam?"
+                placeholder="Insira aqui o nome ou apelido da sua criança"
                 value={form.name}
                 onChange={(e) => {
                   setForm((prev) => ({ ...prev, name: e.target.value }));
@@ -237,7 +256,10 @@ export function NewChildPage() {
                     onClick={() => {
                       setForm((prev) => ({ ...prev, supportLevel: value }));
                       if (errors.supportLevel)
-                        setErrors((prev) => ({ ...prev, supportLevel: undefined }));
+                        setErrors((prev) => ({
+                          ...prev,
+                          supportLevel: undefined,
+                        }));
                     }}
                     className={`flex flex-col items-start gap-0.5 p-3 rounded-2xl border text-left transition-bouncy ${
                       form.supportLevel === value
@@ -255,7 +277,9 @@ export function NewChildPage() {
                 ))}
               </div>
               {errors.supportLevel && (
-                <p className="text-destructive text-xs">{errors.supportLevel}</p>
+                <p className="text-destructive text-xs">
+                  {errors.supportLevel}
+                </p>
               )}
             </div>
           </section>

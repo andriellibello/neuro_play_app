@@ -7,7 +7,7 @@ import { useAppStore } from "@/store/useAppStore";
 import { filterActivities } from "@/lib/filterActivities";
 import { getRecommendations } from "@/lib/iaClient";
 import activitiesData from "@/data/activities.json";
-import type { Activity, AIActivityRecommendation } from "@/types";
+import type { Activity } from "@/types";
 
 type FeedStatus = "loading" | "success" | "error" | "empty";
 
@@ -32,14 +32,18 @@ function SkeletonCard() {
 
 export function FeedPage() {
   const navigate = useNavigate();
-  const { children, activeChildId, setActiveChild } = useAppStore();
+  const { children, activeChildId, setActiveChild, recommendationsCache, setRecommendationsCache } = useAppStore();
 
   const activeChild =
     children.find((c) => c.id === activeChildId) ?? children[0] ?? null;
 
-  const [recommendations, setRecommendations] = useState<AIActivityRecommendation[]>([]);
-  const [status, setStatus] = useState<FeedStatus>("loading");
+  const recommendations = activeChild ? (recommendationsCache[activeChild.id] ?? []) : [];
+  const hasCache = Boolean(activeChild && recommendationsCache[activeChild.id]);
+
+  const [fetchStatus, setFetchStatus] = useState<"loading" | "error" | "empty">("loading");
   const [retryCount, setRetryCount] = useState(0);
+
+  const status: FeedStatus = hasCache ? "success" : fetchStatus;
 
   useEffect(() => {
     if (!activeChild) {
@@ -47,24 +51,25 @@ export function FeedPage() {
       return;
     }
 
+    if (hasCache) return;
+
     let cancelled = false;
 
     async function fetchRecommendations() {
       const filtered = filterActivities(activeChild!, activitiesData as Activity[]);
 
       if (filtered.length === 0) {
-        if (!cancelled) setStatus("empty");
+        if (!cancelled) setFetchStatus("empty");
         return;
       }
 
       try {
         const data = await getRecommendations(activeChild!, filtered);
         if (!cancelled) {
-          setRecommendations(data);
-          setStatus("success");
+          setRecommendationsCache(activeChild!.id, data);
         }
       } catch {
-        if (!cancelled) setStatus("error");
+        if (!cancelled) setFetchStatus("error");
       }
     }
 
@@ -72,10 +77,9 @@ export function FeedPage() {
 
     return () => {
       cancelled = true;
-      setStatus("loading");
-      setRecommendations([]);
+      setFetchStatus("loading");
     };
-  }, [activeChild?.id, retryCount]);
+  }, [activeChild, hasCache, navigate, retryCount, setRecommendationsCache]);
 
   return (
     <div className="min-h-screen bg-background">

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Heart, Clock, Volume2, Sparkles } from "lucide-react";
 import type { AIActivityRecommendation } from "@/types";
 
@@ -28,7 +29,16 @@ export function ActivityCard({ activity }: ActivityCardProps) {
   const config = CATEGORY_CONFIG[activity.categoria] ?? CATEGORY_CONFIG.sensorial;
 
   return (
-    <article className="bg-card rounded-3xl shadow-card hover:shadow-pop transition-bouncy hover:-translate-y-1 overflow-hidden flex flex-col">
+    <article className="bg-card rounded-3xl shadow-card hover:shadow-pop transition-bouncy hover:-translate-y-1 overflow-hidden flex flex-col relative cursor-pointer">
+      {/* Link invisível cobrindo todo o card */}
+      <Link
+        to={`/app/atividade/${activity.id}`}
+        state={{ rec: activity }}
+        className="absolute inset-0 z-10 rounded-3xl"
+        aria-label={`Ver detalhes de ${activity.titulo}`}
+        tabIndex={0}
+      />
+
       {/* Faixa colorida de categoria */}
       <div className={`h-1.5 w-full ${config.gradient}`} aria-hidden="true" />
 
@@ -43,7 +53,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
             onClick={() => setFavorited((f) => !f)}
             aria-label={favorited ? "Remover dos favoritos" : "Adicionar aos favoritos"}
             aria-pressed={favorited}
-            className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
+            className={`relative z-20 w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
               favorited
                 ? "text-primary bg-primary/10"
                 : "text-muted-foreground hover:text-primary hover:bg-primary/10"
