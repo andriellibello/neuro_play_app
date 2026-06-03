@@ -32,7 +32,7 @@ function SkeletonCard() {
 
 export function FeedPage() {
   const navigate = useNavigate();
-  const { children, activeChildId, setActiveChild, recommendationsCache, setRecommendationsCache } = useAppStore();
+  const { guardian, children, activeChildId, setActiveChild, recommendationsCache, setRecommendationsCache } = useAppStore();
 
   const activeChild =
     children.find((c) => c.id === activeChildId) ?? children[0] ?? null;
@@ -52,7 +52,7 @@ export function FeedPage() {
 
   useEffect(() => {
     if (!activeChild) {
-      navigate("/app/criancas/nova");
+      if (guardian) navigate("/app/criancas/nova");
       return;
     }
 
@@ -83,7 +83,7 @@ export function FeedPage() {
     return () => {
       cancelled = true;
     };
-  }, [activeChild, hasCache, navigate, retryCount, setRecommendationsCache]);
+  }, [activeChild, guardian, hasCache, navigate, retryCount, setRecommendationsCache]);
 
   return (
     <div className="min-h-screen bg-background">

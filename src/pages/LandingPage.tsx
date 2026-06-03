@@ -1,48 +1,5 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Brain, Heart, ShieldCheck, Users } from "lucide-react";
-
-const CYCLING_WORDS = [
-  "do desenvolvimento",
-  "da descoberta",
-  "da brincadeira",
-  "do aprendizado",
-  "da conexão",
-];
-
-function AnimatedWord() {
-  const [index, setIndex] = useState(0);
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setVisible(false);
-      setTimeout(() => {
-        setIndex((i) => (i + 1) % CYCLING_WORDS.length);
-        setVisible(true);
-      }, 300);
-    }, 2800);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <span className="relative inline-block">
-      <span
-        className={`relative z-10 px-2 transition-all duration-300 ${
-          visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-        }`}
-        style={{ display: "inline-block" }}
-      >
-        {CYCLING_WORDS[index]}
-      </span>
-      <span
-        aria-hidden="true"
-        className="absolute inset-0 rounded-xl bg-gradient-hero opacity-90"
-        style={{ zIndex: 0 }}
-      />
-    </span>
-  );
-}
 
 function HeroSection() {
   const navigate = useNavigate();
@@ -59,10 +16,15 @@ function HeroSection() {
           </div>
 
           {/* Título */}
-          <h1 className="font-heading text-5xl md:text-6xl font-bold text-foreground leading-[1.15] tracking-[-0.01em] mb-6">
-            Brincar é o caminho <br />
-            <AnimatedWord />
-            <span className="text-foreground">.</span>
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl font-bold text-foreground leading-[1.15] tracking-[-0.01em] mb-6">
+            Brincar é o caminho{" "}
+            <span className="relative inline-block whitespace-nowrap">
+              <span className="relative z-10 px-2">do desenvolvimento.</span>
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 rounded-xl bg-gradient-hero opacity-90"
+              />
+            </span>
           </h1>
 
           {/* Descrição */}
