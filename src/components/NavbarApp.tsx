@@ -1,15 +1,22 @@
-import { Link, useLocation } from "react-router-dom";
-import { Sparkles, Heart, Users, User, LogOut } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Sparkles, Heart, User, LogOut } from "lucide-react";
+import { useAppStore } from "@/store/useAppStore";
 
 const NAV_LINKS = [
   { to: "/app/atividades", label: "Atividades", icon: Sparkles },
   { to: "/app/favoritos", label: "Favoritos", icon: Heart },
-  { to: "/app/comunidade", label: "Comunidade", icon: Users },
   { to: "/app/perfil", label: "Perfil", icon: User },
 ] as const;
 
 export function NavbarApp() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const logout = useAppStore((s) => s.logout);
+
+  function handleLogout() {
+    logout();
+    navigate("/");
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full bg-card/90 backdrop-blur-sm border-b border-border shadow-card">
@@ -46,7 +53,7 @@ export function NavbarApp() {
 
         <button
           type="button"
-          onClick={() => {}}
+          onClick={handleLogout}
           aria-label="Sair da conta"
           className="flex items-center justify-center w-9 h-9 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
         >

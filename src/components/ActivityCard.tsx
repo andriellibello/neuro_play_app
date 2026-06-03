@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, Clock, Volume2, Sparkles } from "lucide-react";
 import type { AIActivityRecommendation } from "@/types";
+import { useAppStore } from "@/store/useAppStore";
 
 const CATEGORY_CONFIG: Record<
   AIActivityRecommendation["categoria"],
@@ -25,7 +25,10 @@ interface ActivityCardProps {
 }
 
 export function ActivityCard({ activity }: ActivityCardProps) {
-  const [favorited, setFavorited] = useState(false);
+  const { activeChildId, favorites, toggleFavorite } = useAppStore();
+  const favorited = activeChildId
+    ? (favorites[activeChildId] ?? []).some((f) => f.id === activity.id)
+    : false;
   const config = CATEGORY_CONFIG[activity.categoria] ?? CATEGORY_CONFIG.sensorial;
 
   return (
@@ -50,7 +53,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
           </span>
           <button
             type="button"
-            onClick={() => setFavorited((f) => !f)}
+            onClick={() => activeChildId && toggleFavorite(activeChildId, activity)}
             aria-label={favorited ? "Remover dos favoritos" : "Adicionar aos favoritos"}
             aria-pressed={favorited}
             className={`relative z-20 w-8 h-8 flex items-center justify-center rounded-full transition-colors ${

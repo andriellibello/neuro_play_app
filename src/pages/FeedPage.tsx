@@ -40,10 +40,15 @@ export function FeedPage() {
   const recommendations = activeChild ? (recommendationsCache[activeChild.id] ?? []) : [];
   const hasCache = Boolean(activeChild && recommendationsCache[activeChild.id]);
 
-  const [fetchStatus, setFetchStatus] = useState<"loading" | "error" | "empty">("loading");
+  const [fetchState, setFetchState] = useState<{
+    childId: string | null;
+    status: "loading" | "error" | "empty";
+  }>({ childId: null, status: "loading" });
   const [retryCount, setRetryCount] = useState(0);
 
-  const status: FeedStatus = hasCache ? "success" : fetchStatus;
+  const currentFetchStatus =
+    fetchState.childId === activeChild?.id ? fetchState.status : "loading";
+  const status: FeedStatus = hasCache ? "success" : currentFetchStatus;
 
   useEffect(() => {
     if (!activeChild) {
@@ -59,7 +64,7 @@ export function FeedPage() {
       const filtered = filterActivities(activeChild!, activitiesData as Activity[]);
 
       if (filtered.length === 0) {
-        if (!cancelled) setFetchStatus("empty");
+        if (!cancelled) setFetchState({ childId: activeChild!.id, status: "empty" });
         return;
       }
 
@@ -69,7 +74,7 @@ export function FeedPage() {
           setRecommendationsCache(activeChild!.id, data);
         }
       } catch {
-        if (!cancelled) setFetchStatus("error");
+        if (!cancelled) setFetchState({ childId: activeChild!.id, status: "error" });
       }
     }
 
@@ -77,7 +82,6 @@ export function FeedPage() {
 
     return () => {
       cancelled = true;
-      setFetchStatus("loading");
     };
   }, [activeChild, hasCache, navigate, retryCount, setRecommendationsCache]);
 

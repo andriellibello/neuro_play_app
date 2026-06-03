@@ -7,6 +7,7 @@ interface AppState {
   children: ChildProfile[];
   activeChildId: string | null;
   recommendationsCache: Record<string, AIActivityRecommendation[]>;
+  favorites: Record<string, AIActivityRecommendation[]>;
 
   setGuardian: (g: Guardian) => void;
   addChild: (c: ChildProfile) => void;
@@ -14,6 +15,7 @@ interface AppState {
   logout: () => void;
   setRecommendationsCache: (childId: string, recs: AIActivityRecommendation[]) => void;
   clearRecommendationsCache: (childId: string) => void;
+  toggleFavorite: (childId: string, rec: AIActivityRecommendation) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -23,6 +25,7 @@ export const useAppStore = create<AppState>()(
       children: [],
       activeChildId: null,
       recommendationsCache: {},
+      favorites: {},
 
       setGuardian: (g) => set({ guardian: g }),
 
@@ -35,7 +38,7 @@ export const useAppStore = create<AppState>()(
       setActiveChild: (id) => set({ activeChildId: id }),
 
       logout: () =>
-        set({ guardian: null, children: [], activeChildId: null, recommendationsCache: {} }),
+        set({ guardian: null, children: [], activeChildId: null, recommendationsCache: {}, favorites: {} }),
 
       setRecommendationsCache: (childId, recs) =>
         set((state) => ({
@@ -48,6 +51,20 @@ export const useAppStore = create<AppState>()(
           delete next[childId];
           return { recommendationsCache: next };
         }),
+
+      toggleFavorite: (childId, rec) =>
+        set((state) => {
+          const current = state.favorites[childId] ?? [];
+          const exists = current.some((f) => f.id === rec.id);
+          return {
+            favorites: {
+              ...state.favorites,
+              [childId]: exists
+                ? current.filter((f) => f.id !== rec.id)
+                : [...current, rec],
+            },
+          };
+        }),
     }),
     {
       name: "neuro-play-store",
@@ -55,6 +72,7 @@ export const useAppStore = create<AppState>()(
         guardian: state.guardian,
         children: state.children,
         activeChildId: state.activeChildId,
+        favorites: state.favorites,
       }),
     }
   )
