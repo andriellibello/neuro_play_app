@@ -60,6 +60,7 @@ export async function getRecommendations(
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash",
     contents: prompt,
+    config: { thinkingConfig: { thinkingBudget: 0 } },
   });
 
   const text = response.text ?? "";
