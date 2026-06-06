@@ -61,7 +61,7 @@ function HeroSection() {
         <div className="flex justify-center lg:justify-end animate-float">
           <div className="rounded-[2rem] overflow-hidden shadow-pop bg-[hsl(195_60%_93%)] w-full">
             <img
-              src="/hero-kids.jpg"
+              src={`${import.meta.env.BASE_URL}hero-kids.jpg`}
               alt="Crianças brincando juntas de forma lúdica e acolhedora"
               className="w-full h-auto object-contain"
             />
